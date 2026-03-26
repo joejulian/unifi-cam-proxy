@@ -1,7 +1,8 @@
 History
 -------
 
-0.0.0
+0.3.1
 +++++
 
-* Nothing
+* Improve RTSP metadata handling so adopted cameras preserve Protect RTSP aliases
+  and report per-stream dimensions more accurately.
