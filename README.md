@@ -17,7 +17,7 @@ Things that work:
 
 View the documentation at <https://unifi-cam-proxy.com/>
 
-Published container images live at `ghcr.io/joejulian/container-images/unifi-cam-proxy`.
+Published container images live at `ghcr.io/joejulian/unifi-cam-proxy`.
 
 ## Donations
 
