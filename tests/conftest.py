@@ -12,9 +12,11 @@ def install_stub(name: str, **attrs):
 
 install_stub("amcrest", AmcrestCamera=object)
 install_stub("amcrest.exceptions", CommError=Exception)
+install_stub("coloredlogs", install=lambda *_args, **_kwargs: None)
 install_stub("hikvisionapi", AsyncClient=object)
 install_stub("reolinkapi", Camera=object)
 install_stub("pytapo", Tapo=object)
+install_stub("uiprotect", ProtectApiClient=object)
 websockets_client = install_stub("websockets.client", WebSocketClientProtocol=object)
 websockets_exceptions = install_stub(
     "websockets.exceptions", ConnectionClosedError=Exception
