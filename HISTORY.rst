@@ -5,7 +5,7 @@ History
 +++++
 
 * Add GitHub Actions CI coverage for linting and the requirement-level test suite.
-* Raise the supported Python floor to 3.11 to match current runtime dependencies.
+* Raise the supported Python floor to 3.12.4 to match current runtime dependencies.
 * Refresh runtime dependencies, including the Protect client library and camera integrations.
 * Fix Protect token generation cleanup when the API client fails before a session is created.
 
