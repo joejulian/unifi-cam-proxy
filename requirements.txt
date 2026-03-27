@@ -1,7 +1,7 @@
 aiohttp==3.13.3
 amcrest==1.9.8
 paho-mqtt==2.1.0
-aiomqtt==2.1.0
+aiomqtt==2.5.1
 backoff==2.2.1
 coloredlogs==15.0.1
 flvlib3@https://github.com/zkonge/flvlib3/archive/master.zip
