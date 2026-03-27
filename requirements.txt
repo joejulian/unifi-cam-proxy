@@ -10,7 +10,7 @@ packaging==26.0
 uiprotect==1.2.1
 reolinkapi==0.1.5
 websockets==16.0
-xmltodict==0.13.0
+xmltodict==1.0.4
 pytapo==3.3.21
 httpx~=0.28.0
 yarl~=1.23.0
