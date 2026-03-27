@@ -7,7 +7,7 @@ coloredlogs==15.0.1
 flvlib3@https://github.com/zkonge/flvlib3/archive/master.zip
 hikvisionapi==0.3.2
 packaging==26.0
-uiprotect==1.2.1
+uiprotect==10.2.3
 reolinkapi==0.4.1
 websockets==16.0
 xmltodict==1.0.4
