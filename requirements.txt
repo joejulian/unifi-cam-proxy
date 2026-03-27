@@ -12,5 +12,5 @@ reolinkapi==0.1.5
 websockets==16.0
 xmltodict==0.13.0
 pytapo==3.3.21
-httpx~=0.27.0
+httpx~=0.28.0
 yarl~=1.23.0
