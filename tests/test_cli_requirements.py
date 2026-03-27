@@ -44,7 +44,11 @@ def test_run_exits_when_ffmpeg_is_missing(monkeypatch):
     )
     monkeypatch.setattr(unifi_main, "parse_args", lambda: args)
     monkeypatch.setattr(unifi_main.coloredlogs, "install", lambda **_kwargs: None)
-    monkeypatch.setattr(unifi_main, "which", lambda binary: None if binary == "ffmpeg" else "/usr/bin/nc")
+    monkeypatch.setattr(
+        unifi_main,
+        "which",
+        lambda binary: None if binary == "ffmpeg" else "/usr/bin/nc",
+    )
 
     with pytest.raises(SystemExit):
         asyncio.run(unifi_main.run())
@@ -65,6 +69,7 @@ def test_run_exits_when_no_adoption_token_is_available(monkeypatch):
     monkeypatch.setattr(unifi_main, "parse_args", lambda: args)
     monkeypatch.setattr(unifi_main.coloredlogs, "install", lambda **_kwargs: None)
     monkeypatch.setattr(unifi_main, "which", lambda _binary: "/usr/bin/present")
+
     async def fake_generate_token(*_args, **_kwargs):
         return None
 

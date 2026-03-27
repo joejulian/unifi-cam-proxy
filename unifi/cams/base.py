@@ -83,7 +83,17 @@ class UnifiCamBase(metaclass=ABCMeta):
         parser.add_argument(
             "--loglevel",
             default="error",
-            choices=["trace", "debug", "verbose", "info", "warning", "error", "fatal", "panic", "quiet"],
+            choices=[
+                "trace",
+                "debug",
+                "verbose",
+                "info",
+                "warning",
+                "error",
+                "fatal",
+                "panic",
+                "quiet",
+            ],
             help="Set the ffmpeg log level",
         )
         parser.add_argument(
@@ -915,7 +925,7 @@ class UnifiCamBase(metaclass=ABCMeta):
                 "UpdateFirmwareRequest",
                 "Reboot",
                 "ubnt_avclient_hello",
-                "ContinuousMove"
+                "ContinuousMove",
             ]
         ):
             return False
@@ -1018,7 +1028,9 @@ class UnifiCamBase(metaclass=ABCMeta):
                 f"Spawning ffmpeg for {stream_index} ({stream_name}): {cmd}"
             )
             self._ffmpeg_handles[stream_index] = subprocess.Popen(
-                cmd, stderr=subprocess.STDOUT, shell=True,
+                cmd,
+                stderr=subprocess.STDOUT,
+                shell=True,
             )
 
     def stop_video_stream(self, stream_index: str):

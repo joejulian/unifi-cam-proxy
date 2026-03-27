@@ -8,10 +8,10 @@ mobile app as your other Unifi devices.
 
 Things that work:
 
-* Live streaming
-* Full-time recording
-* Motion detection with certain cameras
-* Smart Detections using [Frigate](https://github.com/blakeblackshear/frigate)
+- Live streaming
+- Full-time recording
+- Motion detection with certain cameras
+- Smart Detections using [Frigate](https://github.com/blakeblackshear/frigate)
 
 ## Documentation
 

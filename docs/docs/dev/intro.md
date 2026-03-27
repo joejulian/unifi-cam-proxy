@@ -7,7 +7,8 @@ sidebar_position: 0
 
 :::danger
 
-Although some new features are only supported in the development version, it is not recommended to use if you don't know what you're doing.
+Although some new features are only supported in the development version, it is
+not recommended to use if you don't know what you're doing.
 
 :::
 
@@ -17,13 +18,13 @@ Although some new features are only supported in the development version, it is 
 
 Generate a certificate by performing one of the following:
 
-1. If you have a UniFi camera:
+1.  If you have a UniFi camera:
 
     ```sh
     scp ubnt@<your-unifi-cam>:/var/etc/persistent/server.pem client.pem
     ```
 
-2. Create your own client certificate via:
+2.  Create your own client certificate via:
 
     ```sh
     openssl ecparam -out /tmp/private.key -name prime256v1 -genkey -noout

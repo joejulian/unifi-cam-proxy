@@ -120,9 +120,7 @@ class RTSPCam(UnifiCamBase):
 
         return self.stream_dimensions[stream_index]
 
-    def probe_stream_dimensions(
-        self, stream_index: str, source: str
-    ) -> dict[str, int]:
+    def probe_stream_dimensions(self, stream_index: str, source: str) -> dict[str, int]:
         try:
             output = subprocess.check_output(
                 [

@@ -5,10 +5,9 @@ import tempfile
 from pathlib import Path
 
 from aiohttp import web
+from pytapo import Tapo
 
 from unifi.cams.base import UnifiCamBase
-
-from pytapo import Tapo
 
 
 class TapoCam(UnifiCamBase):
@@ -36,7 +35,7 @@ class TapoCam(UnifiCamBase):
             self.logger.info("PTZ Not enabled because of insufficient configuration")
 
         except Exception:
-            self.logger.info("PTZ Not enabled, not supportet for this camera")
+            self.logger.info("PTZ not enabled, not supported for this camera")
 
         if not self.args.snapshot_url:
             self.start_snapshot_stream()
@@ -45,20 +44,13 @@ class TapoCam(UnifiCamBase):
     def add_parser(cls, parser: argparse.ArgumentParser) -> None:
         super().add_parser(parser)
         parser.add_argument(
-            "--username",
-            "-u",
-            default="admin",
-            help="Username (default:admin)"
+            "--username", "-u", default="admin", help="Username (default:admin)"
         )
-        parser.add_argument(
-            "--password",
-            "-p",
-            help="Your TPlink app password"
-        )
+        parser.add_argument("--password", "-p", help="Your TPlink app password")
         parser.add_argument(
             "--rtsp",
             required=True,
-            help="Your RTSP base URL (rtsp://camera_username:camera_password@192.168.172.180:554)"
+            help="Your RTSP base URL (rtsp://camera_username:camera_password@192.168.172.180:554)",
         )
         parser.add_argument(
             "--http-api",
@@ -97,23 +89,23 @@ class TapoCam(UnifiCamBase):
             self.start_snapshot_stream()
         return img_file
 
-    #this gets called when settings are updated on the unifi ui
+    # this gets called when settings are updated on the unifi ui
     async def change_video_settings(self, options) -> None:
         if self.ptz_enabled:
             self.cam = Tapo(self.args.ip, self.args.username, self.args.password)
-            #move down
+            # move down
             if int(options["brightness"]) < 20:
                 self.logger.info("Moving down")
                 self.cam.moveMotor(0, -10)
-            #move up
+            # move up
             if int(options["brightness"]) > 80:
                 self.logger.info("Moving up")
                 self.cam.moveMotor(0, 10)
-            #move left
+            # move left
             if int(options["contrast"]) > 80:
                 self.logger.info("Moving right")
                 self.cam.moveMotor(10, 0)
-            #move right
+            # move right
             if int(options["contrast"]) < 20:
                 self.logger.info("Moving left")
                 self.cam.moveMotor(-10, 0)

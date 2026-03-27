@@ -2,11 +2,10 @@ import argparse
 import asyncio
 import json
 import logging
-import tempfile
 from pathlib import Path
 
-from aiohttp import ClientSession, web
 import websockets
+from aiohttp import web
 
 from unifi.cams.base import UnifiCamBase
 from unifi.cams.rtsp import RTSPCam
@@ -67,7 +66,10 @@ def test_fetch_to_file_uses_real_aiohttp_request(monkeypatch, tmp_path):
         await site.start()
         port = site._server.sockets[0].getsockname()[1]
 
-        cam = SnapshotCam(base_args(snapshot_file=str(tmp_path / "unused.jpg")), logging.getLogger("test"))
+        cam = SnapshotCam(
+            base_args(snapshot_file=str(tmp_path / "unused.jpg")),
+            logging.getLogger("test"),
+        )
         dst = tmp_path / "snapshot.jpg"
         ok = await cam.fetch_to_file(f"http://127.0.0.1:{port}/snapshot.jpg", dst)
 
@@ -79,7 +81,9 @@ def test_fetch_to_file_uses_real_aiohttp_request(monkeypatch, tmp_path):
     asyncio.run(scenario())
 
 
-def test_process_snapshot_request_uploads_snapshot_over_real_aiohttp(monkeypatch, tmp_path):
+def test_process_snapshot_request_uploads_snapshot_over_real_aiohttp(
+    monkeypatch, tmp_path
+):
     monkeypatch.setattr("ssl.create_default_context", lambda: DummySSLContext())
 
     async def scenario():
@@ -101,7 +105,9 @@ def test_process_snapshot_request_uploads_snapshot_over_real_aiohttp(monkeypatch
 
         snapshot_file = tmp_path / "snapshot.jpg"
         snapshot_file.write_bytes(b"camera-snapshot")
-        cam = SnapshotCam(base_args(snapshot_file=str(snapshot_file)), logging.getLogger("test"))
+        cam = SnapshotCam(
+            base_args(snapshot_file=str(snapshot_file)), logging.getLogger("test")
+        )
         cam._ssl_context = False
 
         response = await cam.process_snapshot_request(
@@ -174,7 +180,9 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
             )
             server_done.set()
 
-        server = await websockets.serve(handler, "127.0.0.1", 0, subprotocols=["secure_transfer"])
+        server = await websockets.serve(
+            handler, "127.0.0.1", 0, subprotocols=["secure_transfer"]
+        )
         port = server.sockets[0].getsockname()[1]
 
         real_connect = websockets.connect
@@ -214,9 +222,7 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
         assert received["hello"]["functionName"] == "ubnt_avclient_hello"
         assert received["hello"]["payload"]["adoptionCode"] == "adoption-token"
         assert received["hello"]["payload"]["mac"] == "AA:BB:CC:DD:EE:FF"
-        assert (
-            received["param_agreement"]["payload"]["authToken"] == "adoption-token"
-        )
+        assert received["param_agreement"]["payload"]["authToken"] == "adoption-token"
         assert received["video_settings"]["functionName"] == "ChangeVideoSettings"
         assert (
             received["video_settings"]["payload"]["video"]["video1"]["enabled"] is True

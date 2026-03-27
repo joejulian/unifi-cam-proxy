@@ -23,11 +23,11 @@ optional arguments:
 
 ## NVR (Reolink RLN16-410)
 
-- [x] Supports full time recording
-- [x] Supports motion events
-- [ ] Supports smart detection
-- Notes:
-  - Camera/channel IDs are zero-based
+-   [x] Supports full time recording
+-   [x] Supports motion events
+-   [ ] Supports smart detection
+-   Notes:
+    - Camera/channel IDs are zero-based
 
 ```sh
 unifi-cam-proxy --mac '{unique MAC}' -H {Protect IP} -i {Reolink NVR IP} -c /client.pem -t {Adoption token} \

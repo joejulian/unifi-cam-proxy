@@ -33,4 +33,6 @@ def _backoff_decorator(*_args, **_kwargs):
     return decorator
 
 
-install_stub("backoff", on_predicate=_backoff_decorator, expo=lambda *_args, **_kwargs: None)
+install_stub(
+    "backoff", on_predicate=_backoff_decorator, expo=lambda *_args, **_kwargs: None
+)

@@ -59,7 +59,7 @@ class HikvisionCam(UnifiCamBase):
         try:
             r = await self.cam.PTZCtrl.channels[self.channel].capabilities(method="get")
 
-            if r['PTZChannelCap']['enabled']:
+            if r["PTZChannelCap"]["enabled"]:
                 self.logger.info("Detected PTZ support")
                 return True
         except (httpx.RequestError, httpx.HTTPStatusError):
@@ -69,9 +69,9 @@ class HikvisionCam(UnifiCamBase):
     async def get_video_settings(self) -> dict[str, Any]:
         try:
             if self.ptz_supported:
-                r = (await self.cam.PTZCtrl.channels[self.channel].status(method="get"))["PTZStatus"][
-                    "AbsoluteHigh"
-                ]
+                r = (
+                    await self.cam.PTZCtrl.channels[self.channel].status(method="get")
+                )["PTZStatus"]["AbsoluteHigh"]
                 return {
                     # Tilt/elevation
                     "brightness": int(100 * int(r["azimuth"]) / 3600),

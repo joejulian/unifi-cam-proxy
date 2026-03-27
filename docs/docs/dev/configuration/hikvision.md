@@ -38,11 +38,11 @@ optional arguments:
 
 ## Hikvision DS-2DE3304W-DE
 
-- [x] Supports full time recording
-- [ ] Supports motion events
-- [ ] Supports smart detection
-- Notes:
-  - Change Pan/Tilt/Zoom via brightness/saturation/hue camera setting
+-   [x] Supports full time recording
+-   [ ] Supports motion events
+-   [ ] Supports smart detection
+-   Notes:
+    - Change Pan/Tilt/Zoom via brightness/saturation/hue camera setting
 
 ```sh
 unifi-cam-proxy --mac '{unique MAC}' -H {NVR IP} -i {camera IP} -c /client.pem -t {Adoption token} \

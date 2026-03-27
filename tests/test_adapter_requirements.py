@@ -197,7 +197,9 @@ def test_frigate_detection_waits_for_matching_snapshot_before_ending(monkeypatch
     assert cam.event_label is None
 
 
-def test_hikvision_uses_primary_stream_for_video1_and_substream_for_lower_qualities(monkeypatch):
+def test_hikvision_uses_primary_stream_for_video1_and_substream_for_lower_qualities(
+    monkeypatch,
+):
     monkeypatch.setattr("ssl.create_default_context", lambda: DummySSLContext())
 
     class FakeAsyncClient:

@@ -66,13 +66,20 @@ def test_rtsp_two_sources_map_in_descending_quality_order(monkeypatch):
     )
 
     assert asyncio.run(cam.get_stream_source("video1")) == "rtsp://example.invalid/high"
-    assert asyncio.run(cam.get_stream_source("video2")) == "rtsp://example.invalid/medium"
-    assert asyncio.run(cam.get_stream_source("video3")) == "rtsp://example.invalid/medium"
+    assert (
+        asyncio.run(cam.get_stream_source("video2")) == "rtsp://example.invalid/medium"
+    )
+    assert (
+        asyncio.run(cam.get_stream_source("video3")) == "rtsp://example.invalid/medium"
+    )
 
 
 def test_snapshot_url_is_used_for_snapshots(monkeypatch, tmp_path):
     monkeypatch.setattr("ssl.create_default_context", lambda: DummySSLContext())
-    cam = RTSPCam(build_args(snapshot_url="http://example.invalid/current.jpg"), logging.getLogger("test"))
+    cam = RTSPCam(
+        build_args(snapshot_url="http://example.invalid/current.jpg"),
+        logging.getLogger("test"),
+    )
 
     fetched = {}
 

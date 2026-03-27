@@ -30,16 +30,16 @@ optional arguments:
 
 ## Amcrest IP8M-T2599E
 
-- [x] Supports full time recording
-- [x] Supports motion events
-- [ ] Supports smart detection
-- Notes:
-  - Camera configuration:
-    - Video codec must be H.264 (H.265/HEVC is not supported).
-    - Audio codec should be AAC. If not, adjust the ffmpeg args to re-encode to AAC.
-    - Ensure the sub stream is enabled.
-    - If desired, ensure motion detection is enabled with the desired anti-dither and detection area.
-  - The `-bsf:v` parameter is needed to make live video work.
+-   [x] Supports full time recording
+-   [x] Supports motion events
+-   [ ] Supports smart detection
+-   Notes:
+    -   Camera configuration:
+        - Video codec must be H.264 (H.265/HEVC is not supported).
+        - Audio codec should be AAC. If not, adjust the ffmpeg args to re-encode to AAC.
+        - Ensure the sub stream is enabled.
+        - If desired, ensure motion detection is enabled with the desired anti-dither and detection area.
+    -   The `-bsf:v` parameter is needed to make live video work.
     The first `tick_rate` value should be `fps * 2000`.
     See [this comment](https://github.com/keshavdv/unifi-cam-proxy/issues/31#issuecomment-841914363).
 
