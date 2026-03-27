@@ -42,7 +42,7 @@ class Core(object):
             try:
                 ws = await websockets.connect(
                     uri,
-                    extra_headers=headers,
+                    additional_headers=headers,
                     ssl=self.ssl_context,
                     subprotocols=["secure_transfer"],
                 )
