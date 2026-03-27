@@ -51,15 +51,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          provenance: false
-          sbom: false
-          tags: ${{ steps.prep.outputs.tags }}
-          labels: |
-            org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+        run: |
+          tag_args=()
+          IFS=',' read -ra tags <<< "${{ steps.prep.outputs.tags }}"
+          for tag in "${tags[@]}"; do
+            tag_args+=(-t "${tag}")
+          done
+
+          docker buildx build --push \
+            --platform linux/amd64,linux/arm64 \
+            --label "org.opencontainers.image.source=${{ github.event.repository.html_url }}" \
+            --label "org.opencontainers.image.created=${{ steps.prep.outputs.created }}" \
+            --label "org.opencontainers.image.revision=${{ github.sha }}" \
+            "${tag_args[@]}" \
+            .
