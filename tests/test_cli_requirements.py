@@ -108,3 +108,57 @@ def test_generate_token_returns_manage_payload_token_and_closes_session(monkeypa
 
     assert token == "generated-token"
     assert closed is True
+
+
+def test_generate_token_returns_none_when_client_creation_fails(monkeypatch, caplog):
+    class FakeProtectApiClient:
+        def __init__(self, *_args, **_kwargs):
+            raise RuntimeError("cannot connect")
+
+    args = argparse.Namespace(
+        host="protect.example",
+        nvr_username="user",
+        nvr_password="pass",
+    )
+    monkeypatch.setattr(unifi_main, "ProtectApiClient", FakeProtectApiClient)
+
+    with caplog.at_level(logging.ERROR):
+        token = asyncio.run(unifi_main.generate_token(args, logging.getLogger("test")))
+
+    assert token is None
+    assert "Could not automatically fetch token" in caplog.text
+
+
+def test_generate_token_returns_none_when_manage_payload_fails_and_closes_session(
+    monkeypatch, caplog
+):
+    closed = False
+
+    class FakeProtectApiClient:
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        async def update(self):
+            return None
+
+        async def api_request(self, path):
+            assert path == "cameras/manage-payload"
+            raise RuntimeError("request failed")
+
+        async def close_session(self):
+            nonlocal closed
+            closed = True
+
+    args = argparse.Namespace(
+        host="protect.example",
+        nvr_username="user",
+        nvr_password="pass",
+    )
+    monkeypatch.setattr(unifi_main, "ProtectApiClient", FakeProtectApiClient)
+
+    with caplog.at_level(logging.ERROR):
+        token = asyncio.run(unifi_main.generate_token(args, logging.getLogger("test")))
+
+    assert token is None
+    assert closed is True
+    assert "Could not automatically fetch token" in caplog.text
