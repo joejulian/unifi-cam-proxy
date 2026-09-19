@@ -32,17 +32,33 @@ def test_timestamp_extension_retains_full_counter(
 
     clock_sync.write_timestamp_trailer(is_video, ticks / 1000)
 
-    assert output.getvalue() == struct.pack(">IIQ", timebase, 0, ticks)
+    expected_ticks = int((ticks / 1000) * timebase / 90)
+    assert output.getvalue() == struct.pack(">IIQ", timebase, 0, expected_ticks)
 
 
-@pytest.mark.parametrize("is_video", [True, False])
 def test_timestamp_extension_matches_existing_format_before_rollover(
-    monkeypatch, is_video
+    monkeypatch,
 ):
     output = io.BytesIO()
     monkeypatch.setattr(clock_sync, "write", output.write)
 
-    clock_sync.write_timestamp_trailer(is_video, 1234.5)
+    clock_sync.write_timestamp_trailer(True, 1234.5)
 
-    timebase = b"\x00\x01\x5f\x90" if is_video else b"\x00\x00\x2b\x11"
+    timebase = b"\x00\x01\x5f\x90"
     assert output.getvalue() == timebase + bytes(8) + struct.pack(">I", 1234500)
+
+
+@pytest.mark.parametrize("elapsed_seconds", [1, 100, 86400, 604800])
+def test_audio_and_video_clocks_represent_the_same_elapsed_time(
+    monkeypatch, elapsed_seconds
+):
+    output = io.BytesIO()
+    monkeypatch.setattr(clock_sync, "write", output.write)
+
+    for is_video in (True, False):
+        clock_sync.write_timestamp_trailer(is_video, elapsed_seconds * 90)
+
+    video_base, _, video_ticks = struct.unpack(">IIQ", output.getvalue()[:16])
+    audio_base, _, audio_ticks = struct.unpack(">IIQ", output.getvalue()[16:])
+    assert video_ticks / video_base == elapsed_seconds
+    assert audio_ticks / audio_base == elapsed_seconds

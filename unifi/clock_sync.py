@@ -37,7 +37,9 @@ def write_timestamp_trailer(is_packet, ts):
     # Keep the full 64-bit counter in Protect's 16-byte timestamp extension.
     # Encoding only its low 32 bits crashes after about 13 hours at 90 kHz.
     timebase = 90000 if is_packet else 11025
-    write(struct.pack(">IIQ", timebase, 0, int(ts * 1000)))
+    # ts is scaled to 90 ticks/ms by the default timestamp modifier. Audio
+    # and metadata use a different timebase, but must represent the same time.
+    write(struct.pack(">IIQ", timebase, 0, int(ts * timebase / 90)))
 
 
 def main(args):
