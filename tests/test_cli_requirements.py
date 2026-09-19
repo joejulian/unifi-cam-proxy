@@ -8,6 +8,22 @@ import pytest
 from unifi import main as unifi_main
 
 
+def test_main_starts_without_an_existing_event_loop(monkeypatch):
+    loops = []
+
+    async def fake_run():
+        loops.append(asyncio.get_running_loop())
+        await asyncio.sleep(0)
+
+    asyncio.set_event_loop(None)
+    monkeypatch.setattr(unifi_main, "run", fake_run)
+
+    unifi_main.main()
+
+    assert len(loops) == 1
+    assert loops[0].is_closed()
+
+
 def test_parse_args_accepts_documented_rtsp_invocation(monkeypatch):
     monkeypatch.setattr(
         sys,
