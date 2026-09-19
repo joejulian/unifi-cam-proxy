@@ -8,7 +8,7 @@ import sys
 import time
 
 from flvlib3.astypes import FLVObject
-from flvlib3.primitives import make_ui8, make_ui32
+from flvlib3.primitives import make_ui8
 from flvlib3.tags import create_script_tag
 
 
@@ -34,14 +34,10 @@ def write_log(data):
 
 
 def write_timestamp_trailer(is_packet, ts):
-    # Write 15 byte trailer
-    write(make_ui8(0))
-    if is_packet:
-        write(bytes([1, 95, 144, 0, 0, 0, 0, 0, 0, 0, 0]))
-    else:
-        write(bytes([0, 43, 17, 0, 0, 0, 0, 0, 0, 0, 0]))
-
-    write(make_ui32(int(ts * 1000)))
+    # Keep the full 64-bit counter in Protect's 16-byte timestamp extension.
+    # Encoding only its low 32 bits crashes after about 13 hours at 90 kHz.
+    timebase = 90000 if is_packet else 11025
+    write(struct.pack(">IIQ", timebase, 0, int(ts * 1000)))
 
 
 def main(args):
@@ -56,9 +52,11 @@ def main(args):
 
     # Skip rest of FLV header
     write(read_bytes(source, 1))
-    read_bytes(source, 1)
-    # Write custom bitmask for FLV type
-    write(make_ui8(7))
+    flags = read_bytes(source, 1)
+    if not flags:
+        return
+    # Enable Protect's timestamp extension without inventing an audio track.
+    write(make_ui8(flags[0] | 2))
     write(read_bytes(source, 4))
 
     # Tag 0 previous size
