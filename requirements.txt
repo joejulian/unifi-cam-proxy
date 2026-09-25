@@ -9,7 +9,7 @@ hikvisionapi==0.3.2
 packaging==26.0
 uiprotect==10.2.3
 reolinkapi==0.4.1
-websockets==16.0
+websockets==17.1
 xmltodict==1.0.4
 pytapo==3.4.11
 httpx~=0.28.0
