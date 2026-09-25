@@ -58,5 +58,10 @@ jobs:
     - name: Install dependencies
       run: pip install -e .[test]
 
+    - name: Check installed runtime dependencies
+      run: |
+        pip check
+        unifi-cam-proxy --help
+
     - name: Run tests
       run: pytest -q

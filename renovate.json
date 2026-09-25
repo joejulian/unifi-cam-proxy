@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "config:recommended",
+    ":rebaseStalePrs",
+    ":separateMajorReleases"
+  ],
+  "automerge": false,
+  "rebaseWhen": "behind-base-branch"
+}
