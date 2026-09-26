@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import json
 import logging
+from contextlib import suppress
 from pathlib import Path
 
 import websockets
@@ -220,11 +221,15 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
         )
         core = Core(args, cam, logging.getLogger("test"))
 
-        await asyncio.wait_for(core.run(), timeout=10)
-        await asyncio.wait_for(server_done.wait(), timeout=2)
-
-        server.close()
-        await server.wait_closed()
+        core_task = asyncio.create_task(core.run())
+        try:
+            await asyncio.wait_for(server_done.wait(), timeout=10)
+        finally:
+            core_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await core_task
+            server.close()
+            await server.wait_closed()
 
         assert len(connections) == 2
         assert connections[0]["payload"] == connections[1]["payload"]
