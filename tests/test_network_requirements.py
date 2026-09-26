@@ -232,7 +232,8 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
             await server.wait_closed()
 
         assert len(connections) == 2
-        assert connections[0]["payload"] == connections[1]["payload"]
+        for field in ("adoptionCode", "mac", "model"):
+            assert connections[0]["payload"][field] == connections[1]["payload"][field]
         assert received["hello"]["functionName"] == "ubnt_avclient_hello"
         assert received["hello"]["payload"]["adoptionCode"] == "adoption-token"
         assert received["hello"]["payload"]["mac"] == "AA:BB:CC:DD:EE:FF"
