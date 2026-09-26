@@ -140,9 +140,16 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
     async def scenario():
         received = {}
         server_done = asyncio.Event()
+        connections = []
 
         async def handler(websocket):
             hello = json.loads(await websocket.recv())
+            connections.append(hello)
+            assert websocket.request.headers["camera-mac"] == "AA:BB:CC:DD:EE:FF"
+            assert websocket.subprotocol == "secure_transfer"
+            if len(connections) == 1:
+                await websocket.close(code=1011, reason="test reconnect")
+                return
             received["hello"] = hello
 
             await websocket.send(
@@ -213,12 +220,14 @@ def test_core_rtsp_smoke_uses_real_websocket_messages(monkeypatch):
         )
         core = Core(args, cam, logging.getLogger("test"))
 
-        await core.run()
+        await asyncio.wait_for(core.run(), timeout=10)
         await asyncio.wait_for(server_done.wait(), timeout=2)
 
         server.close()
         await server.wait_closed()
 
+        assert len(connections) == 2
+        assert connections[0]["payload"] == connections[1]["payload"]
         assert received["hello"]["functionName"] == "ubnt_avclient_hello"
         assert received["hello"]["payload"]["adoptionCode"] == "adoption-token"
         assert received["hello"]["payload"]["mac"] == "AA:BB:CC:DD:EE:FF"
