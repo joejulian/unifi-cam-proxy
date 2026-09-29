@@ -16,7 +16,6 @@ install_stub("coloredlogs", install=lambda *_args, **_kwargs: None)
 install_stub("hikvisionapi", AsyncClient=object)
 install_stub("reolinkapi", Camera=object)
 install_stub("pytapo", Tapo=object)
-install_stub("uiprotect", ProtectApiClient=object)
 
 aiomqtt = install_stub("aiomqtt", Client=object, Message=object)
 aiomqtt_exceptions = install_stub("aiomqtt.exceptions", MqttError=Exception)
