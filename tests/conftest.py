@@ -24,15 +24,3 @@ aiomqtt.exceptions = aiomqtt_exceptions
 asyncio_mqtt = install_stub("asyncio_mqtt", Client=object)
 asyncio_mqtt_error = install_stub("asyncio_mqtt.error", MqttError=Exception)
 asyncio_mqtt.error = asyncio_mqtt_error
-
-
-def _backoff_decorator(*_args, **_kwargs):
-    def decorator(fn):
-        return fn
-
-    return decorator
-
-
-install_stub(
-    "backoff", on_predicate=_backoff_decorator, expo=lambda *_args, **_kwargs: None
-)
